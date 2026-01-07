@@ -1,65 +1,433 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <h1 id="title"><code>Fa&ccedil;ade-X</code> specification</h1>
-    <h2 id="subtitle">A minimalist model for representing heterogeneous data in RDF</h2>
-    
-    <script
-      src="https://www.w3.org/Tools/respec/respec-w3c"
-      class="remove"
-      defer
-    ></script>
-    <script class="remove">
-      // All config options at https://respec.org/docs/
-      var respecConfig = {
-        specStatus: "ED",
-        editors: [
-        { name: "Luigi Asprino", company: "Università Telematica San Raffaele - Roma", companyURL: "https://www.uniroma5.it/",   mailto: "luigi.asprino@gmail.com", orcid: "0000-0003-1907-0677" }, 
-        { name: "Enrico Daga", company: "The Open University", companyURL:  "https://www.open.ac.uk/", mailto: "enrico.daga@open.ac.uk", orcid: "0000-0002-3184-5407" }, ],
-        github: "w3c-facade-x/facadex-metamodel-specification",
-        shortName: "facade-x",
-        xref: "web-platform",
-        group: "cg/facade-x",
-          isPreview: true,
-          license:"w3c-software-doc",
-          specStatus: "unofficial",
-          latestVersion: "https://w3c-facade-x.github.io/facadex-metamodel-specification/",
 
-      };
-    </script>
-  </head>
-  <body>
-    
-    <section id="abstract">
-      <p>This is required.</p>
-    </section>
-    
-    <section id="sotd">
-      <p>This is required.</p>
-    </section>
-    
-    <section class="informative">
-      <h2>Introduction</h2>
-      <p>Some informative introductory text.</p>
-      <aside class="note" title="A useful note">
-        <p>I'm a note!</p>
-      </aside>
-    </section>
-    
-    <section>
-      <h2>Issues</h2>  
-        <p class="issue" data-number="1">
-          <!-- Issue can automatically be populated from GitHub -->
-        </p>
-      </section>
-    </section>
-    
-    <section id="conformance">
-      <p>
-        This is required for specifications that contain normative material.
-      </p>
-    </section>
-    
-  </body>
+<head>
+  <meta charset="utf-8" />
+  <h1 id="title"><code>Fa&ccedil;ade-X</code> specification</h1>
+  <h2 id="subtitle">A minimalist model for representing heterogeneous data in RDF</h2>
+
+  <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove" defer></script>
+  <script class="remove">
+    // All config options at https://respec.org/docs/
+    var respecConfig = {
+      specStatus: "ED",
+      editors: [
+        { name: "Luigi Asprino", company: "Università Telematica San Raffaele - Roma", companyURL: "https://www.uniroma5.it/", mailto: "luigi.asprino@gmail.com", orcid: "0000-0003-1907-0677" },
+        { name: "Enrico Daga", company: "The Open University", companyURL: "https://www.open.ac.uk/", mailto: "enrico.daga@open.ac.uk", orcid: "0000-0002-3184-5407" },],
+      github: "w3c-facade-x/facadex-metamodel-specification",
+      shortName: "facade-x",
+      xref: "web-platform",
+      group: "cg/facade-x",
+      isPreview: true,
+      license: "w3c-software-doc",
+      specStatus: "unofficial",
+      latestVersion: "https://w3c-facade-x.github.io/facadex-metamodel-specification/",
+
+    };
+  </script>
+</head>
+
+<body>
+
+  <section id="abstract">
+    <p>This is required.</p>
+  </section>
+
+  <section id="sotd">
+    <p>This is required.</p>
+  </section>
+
+  <section class="informative">
+    <h2>Introduction</h2>
+    <p>Fa&ccedil;ade-X is the meta-model resulting from the abstraction of all the basic data structures used to
+      represent source data formats, combined into a unified model.</p>
+
+  </section>
+
+  <section>
+    <h2>Issues</h2>
+    <p class="issue" data-number="1">
+      <!-- Issue can automatically be populated from GitHub -->
+    </p>
+  </section>
+  </section>
+
+
+
+  <section id="resources_datasources">
+    <h2>Resources and Data Sources</h2>
+
+
+    <p>
+      We rely on the generic notion of <em>resource</em> to refer to a digital artifact that wraps some data (to not be
+      confused with the concept of Resource in RDFS).
+      We say that a resource contains one or more <em>data sources</em>, to refer to actual data contained in them.
+    </p>
+
+    <p>
+      Intuitively, a CSV is a file (then, a resource) that includes some tabular data (hence, a single data source).
+      A Spreadsheet is a file (then, a resource) containing many tabs, each one of them including tabular data
+      (hence, possibly multiple data sources).
+    </p>
+
+    <p>
+      <strong>Predicate Definition</strong>
+      <code>Resource(x)</code> denotes a digital artifact (e.g., a file or service).
+      <code>DataSource(x)</code> denotes a collection of data contained in a resource.
+      <code>includes(r, ds)</code> means that resource <code>r</code> contains data source <code>ds</code>.
+    </p>
+
+    <p>Every resource must contain at least one data source.</p>
+    <pre>
+∀r ( Resource(r) → ∃ds ( includes(r, ds) ∧ DataSource(ds) ) )
+    </pre>
+
+    <p>The first argument of the includes predicate is a resource and the second is a data source.</p>
+    <pre>
+∀r,ds ( includes(r, ds) → Resource(r) ∧ DataSource(ds) )
+    </pre>
+
+    <p>Every data source must belong to some resource.</p>
+    <pre>
+∀ds ( DataSource(ds) → ∃r ( includes(r, ds) ∧ Resource(r) ) )
+    </pre>
+
+    <p>A data source cannot belong to two different resources; it is included in one at most.</p>
+    <pre>
+∀ds,r1,r2 ( includes(r1, ds) ∧ includes(r2, ds) → r1 = r2 )
+    </pre>
+  </section>
+
+  <section>
+    <h2>Containers, Slots, and Values</h2>
+
+    <p>
+      The framework introduces the notion of <em>Container</em> as an abstraction of both lists and maps through the
+      notion of <em>Slots</em>.
+      A <em>Slot</em> is an allotted place for an object, namely a primitive value or another container,
+      <em>&ldquo;contained&rdquo;</em> in a <em>Container</em>.
+    </p>
+    <p>
+      Containers are collections of unique key/value pairs (slots) where:
+      the key of the slot is unique in the collection and can be either a number (i.e. <code>NumberSlot</code>)
+      or a sequence of alphanumeric characters (i.e. <code>StringSlot</code>);
+      the value can be either a primitive value or another container.
+    </p>
+
+    <p>
+      We say that a container <code>c</code> <em>contains</em> a slot <code>s</code> if
+      <code>(c,s)</code> is in the interpretation of the predicate
+      <code>hasSlot</code>.
+      Moreover, we say that a slot <code>s</code> <em>holds</em> a value
+      <code>v</code> (or a container <code>c</code>) if
+      <code>(s,v)</code> (resp. <code>(s,c)</code>) is in the interpretation of
+      <code>hasValue</code> (resp. <code>hasContainer</code>).
+      In this case we can also say that <code>v</code> (resp. <code>c</code>) is assigned to a slot.
+    </p>
+
+    <p>
+      Finally, we say that a container <code>c</code> <em>recursively contains</em> a container
+      <code>c'</code> if there exists a sequence
+      <code>s<sub>0</sub>,...,s<sub>n</sub></code> and containers
+      <code>c<sub>1</sub>,...,c<sub>n</sub></code> such that
+      <code>(c,s<sub>0</sub>),(c<sub>1</sub>,s<sub>1</sub>)...(c<sub>n</sub>,s<sub>n</sub>)</code> is in the
+      interpretation of
+      <code>hasSlot</code> and
+      <code>(s<sub>0</sub>,c<sub>1</sub>),(s<sub>1</sub>,c<sub>2</sub>),...,(s<sub>n</sub>,c')</code> is in the
+      interpretation of
+      <code>hasContainer</code>.
+    </p>
+
+
+    <p>
+      <strong>Predicate Definition</strong>
+      <code>Container(x)</code> represents a collection of slots (list or map).
+      <code>Slot(x)</code> is an allotted place for an object within a container.
+      <code>NumberSlot(x)</code> and <code>StringSlot(x)</code> identify the type of the slot.
+      <code>Value(x)</code> denotes a primitive datum.
+      <code>hasSlot(c,s)</code> links a container to a slot.
+      <code>hasValue(s,v)</code> links a slot to a value.
+      <code>hasContainer(s,c)</code> links a slot to a nested container.
+      <code>includesContainer(ds,c)</code> associates a data source with its containers.
+    </p>
+
+    <p>The first argument of hasSlot is a Container and the second is a Slot.</p>
+    <pre>
+∀c,s ( hasSlot(c, s) → Container(c) ∧ Slot(s) )
+    </pre>
+
+    <p>The first argument of hasValue is a slot and the second is a value.</p>
+    <pre>
+∀s,v ( hasValue(s, v) → Slot(s) ∧ Value(v) )
+    </pre>
+
+    <p>The first argument of hasContainer is a slot and the second is a container.</p>
+    <pre>
+∀s,c ( hasContainer(s, c) → Slot(s) ∧ Container(c) )
+    </pre>
+
+    <p>Every NumberSlot is a slot.</p>
+    <pre>
+∀s ( NumberSlot(s) → Slot(s) )
+    </pre>
+
+    <p>Every StringSlot is a slot.</p>
+    <pre>
+∀s ( StringSlot(s) → Slot(s) )
+    </pre>
+
+    <p>A slot identified by a string cannot also be a NumberSlot.</p>
+    <pre>
+∀s ( StringSlot(s) → ¬NumberSlot(s) )
+    </pre>
+
+    <p>Every slot must be either a NumberSlot or a StringSlot.</p>
+    <pre>
+∀s ( Slot(s) → NumberSlot(s) ∨ StringSlot(s) )
+
+    </pre>
+
+    <p>If a data source includes a container, then the first is a data source and the second is a container.</p>
+    <pre>
+∀ds,c ( includesContainer(ds, c) → DataSource(ds) ∧ Container(c) )
+    </pre>
+
+    <p>Every container must belong to some data source.</p>
+    <pre>
+∀c ( Container(c) → ∃ds ( includesContainer(ds, c) ∧ DataSource(ds) ) )
+    </pre>
+
+    <p>A container cannot belong to more than one data source.</p>
+    <pre>
+∀c,ds1,ds2 ( includesContainer(ds1, c) ∧ includesContainer(ds2, c) → ds1 = ds2 )
+    </pre>
+  </section>
+
+  <section>
+    <h2>Properties of Slots</h2>
+    <p>
+      Values must be assigned to a slot.
+      Slots must be contained by a single container.
+      Slots must hold either a single container or a single value.
+      There cannot exist a container c and a slot s such that c contains s and s holds c.
+      Each container cannot recursively contain itself through a sequence of slots and containers.
+    </p>
+    <p>
+      <strong>Predicate Definition</strong>
+      Slots act as unique positions inside containers.
+      Each slot belongs to exactly one container and holds exactly one item,
+      either a primitive value or another container.
+      The containment structure is acyclic.
+    </p>
+
+    <p>Every value must be assigned to some slot.</p>
+    <pre>
+∀v ( Value(v) → ∃s hasValue(s, v) )
+    </pre>
+
+    <p>Every slot must be contained in some container.</p>
+    <pre>
+∀s ( Slot(s) → ∃c hasSlot(c, s) )
+    </pre>
+
+    <p>Each slot belongs to exactly one container.</p>
+    <pre>
+∀s,c1,c2 ( hasSlot(c1, s) ∧ hasSlot(c2, s) → c1 = c2 )
+    </pre>
+
+    <p>Every slot must hold either a container or a value.</p>
+    <pre>
+∀s ( Slot(s) → (∃x hasContainer(s, x)) ∨ (∃x hasValue(s, x)) )
+    </pre>
+
+    <p>A slot cannot simultaneously hold a container and a value.</p>
+    <pre>
+∀s,x ( hasContainer(s, x) → ¬hasValue(s, x) )
+    </pre>
+
+    <p>A slot can hold at most one container.</p>
+    <pre>
+∀s,c1,c2 ( hasContainer(s, c1) ∧ hasContainer(s, c2) → c1 = c2 )
+    </pre>
+
+    <p>A slot can hold at most one value.</p>
+    <pre>
+∀s,v1,v2 ( hasValue(s, v1) ∧ hasValue(s, v2) → v1 = v2 )
+    </pre>
+
+    <p>A container cannot directly contain itself via one of its slots.</p>
+    <pre>
+∀c,s ( hasSlot(c, s) → ¬hasContainer(s, c) )
+    </pre>
+
+    <p>No container may (even indirectly) contain itself; the containment graph is acyclic.</p>
+    <pre>
+¬∃c,s1..sn,c1..cn (
+  hasSlot(c,s1) ∧ hasContainer(s1,c1) ∧ … ∧ hasSlot(cn-1,sn) ∧ hasContainer(sn,c)
+)
+    </pre>
+
+    <p>A container cannot have two distinct slots occupying the same position.</p>
+    <pre>
+∀c,s1,s2 ( hasSlot(c, s1) ∧ hasSlot(c, s2) → s1 = s2 )
+    </pre>
+  </section>
+
+  <section>
+    <h2>Types</h2>
+    <p>
+      Containers can have types.
+      Every type must be assigned to a container.
+      To this end we introduce the unary predicate <code>Type</code> and the binary predicate <code>hasType</code>.
+    </p>
+
+    <p>
+      <strong>Predicate Definition</strong>
+      <code>Type(x)</code> denotes a classification assigned to containers.
+      <code>hasType(c,t)</code> links a container to a type.
+      Types exist only as annotations of containers.
+    </p>
+
+    <p>If a container has a type, then the first is a container and the second is a type.</p>
+    <pre>
+∀c,t ( hasType(c, t) → Container(c) ∧ Type(t) )
+    </pre>
+
+    <p>Every type must be assigned to at least one container.</p>
+    <pre>
+∀t ( Type(t) → ∃c hasType(c, t) )
+    </pre>
+  </section>
+
+  <section>
+    <h2>Definition 5 — Disjointness</h2>
+    The unary predicates Container, Slot, Value, and Type are pairwise disjoint.  
+    <p>
+      <strong>Predicate Definition</strong>
+      The categories <code>Container</code>, <code>Slot</code>, <code>Value</code>, and <code>Type</code>
+      are mutually exclusive.
+    </p>
+
+    <p>Nothing can be both a container and a slot.</p>
+    <pre>
+∀x ( Container(x) → ¬Slot(x) )
+    </pre>
+
+    <p>Nothing can be both a container and a value.</p>
+    <pre>
+∀x ( Container(x) → ¬Value(x) )
+    </pre>
+
+    <p>Nothing can be both a container and a type.</p>
+    <pre>
+∀x ( Container(x) → ¬Type(x) )
+    </pre>
+
+    <p>Nothing can be both a slot and a container.</p>
+    <pre>
+∀x ( Slot(x) → ¬Container(x) )
+    </pre>
+
+    <p>Nothing can be both a slot and a value.</p>
+    <pre>
+∀x ( Slot(x) → ¬Value(x) )
+    </pre>
+
+    <p>Nothing can be both a slot and a type.</p>
+    <pre>
+∀x ( Slot(x) → ¬Type(x) )
+    </pre>
+
+    <p>Nothing can be both a value and a container.</p>
+    <pre>
+∀x ( Value(x) → ¬Container(x) )
+    </pre>
+
+    <p>Nothing can be both a value and a slot.</p>
+    <pre>
+∀x ( Value(x) → ¬Slot(x) )
+    </pre>
+
+    <p>Nothing can be both a value and a type.</p>
+    <pre>
+∀x ( Value(x) → ¬Type(x) )
+    </pre>
+
+    <p>Nothing can be both a type and a container.</p>
+    <pre>
+∀x ( Type(x) → ¬Container(x) )
+    </pre>
+
+    <p>Nothing can be both a type and a slot.</p>
+    <pre>
+∀x ( Type(x) → ¬Slot(x) )
+    </pre>
+
+    <p>Nothing can be both a type and a value.</p>
+    <pre>
+∀x ( Type(x) → ¬Value(x) )
+    </pre>
+  </section>
+
+  <section>
+    <h2>Root Container</h2>+
+    <p>
+  For each data source, there exists one and only one Root container.
+  The Root container cannot be assigned to a slot.
+  Containers that are not root must be assigned to a slot.
+  To identify the root container we introduce the unary predicate <code>Root</code> as a specialisation of Container and the binary predicate <code>hasRoot</code> that connects a data source to its root container.
+</p>
+
+    <p>
+      <strong>Predicate Definition</strong>
+      For each data source there is a distinguished top-level container, the root.
+      The root is the entry point of the container hierarchy and cannot be nested in any slot.
+      All other containers must be reachable from it.
+    </p>
+
+    <p>Every data source must have at least one root container.</p>
+    <pre>
+∀ds ( DataSource(ds) → ∃r hasRoot(ds, r) )
+    </pre>
+
+    <p>If a data source has a root, then the first is a data source and the second is a root.</p>
+    <pre>
+∀ds,r ( hasRoot(ds, r) → DataSource(ds) ∧ Root(r) )
+    </pre>
+
+    <p>Every root container is the root of some data source.</p>
+    <pre>
+∀r ( Root(r) → ∃ds hasRoot(ds, r) )
+    </pre>
+
+    <p>The root container of a data source is included in that data source.</p>
+    <pre>
+∀ds,r ( hasRoot(ds, r) → includesContainer(ds, r) )
+    </pre>
+
+    <p>Every root is also a container.</p>
+    <pre>
+∀x ( Root(x) → Container(x) )
+    </pre>
+
+    <p>A root container cannot be nested inside any slot.</p>
+    <pre>
+∀r,s ( Root(r) → ¬hasContainer(s, r) )
+    </pre>
+
+    <p>Each data source has exactly one root container.</p>
+    <pre>
+∀ds,r1,r2 ( hasRoot(ds, r1) ∧ hasRoot(ds, r2) → r1 = r2 )
+    </pre>
+
+    <p>Every non-root container must be contained in some slot.</p>
+    <pre>
+∀c ( Container(c) ∧ ¬Root(c) → ∃s hasContainer(s, c) )
+    </pre>
+  </section>
+  </main>
+
+
+</body>
+
 </html>
